@@ -8,65 +8,20 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
+
         <link href="css/main.css" rel="stylesheet" type="text/css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 
         <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
 
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
     </head>
     <body>
+
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
+{{--            @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
@@ -78,44 +33,84 @@
                         @endif
                     @endauth
                 </div>
-            @endif
+            @endif--}}
 
             <div class="content">
 
-                <form id="regForm" action="/action_page.php">
-                    <h1>Register:</h1>
-                    <!-- One "tab" for each step in the form: -->
-                    <div class="tab">Name:
-                        <p><input placeholder="First name..." oninput="this.className = ''" name="fname"></p>
-                        <p><input placeholder="Last name..." oninput="this.className = ''" name="lname"></p>
-                    </div>
-                    <div class="tab">Contact Info:
-                        <p><input placeholder="E-mail..." oninput="this.className = ''" name="email"></p>
-                        <p><input placeholder="Phone..." oninput="this.className = ''" name="phone"></p>
-                    </div>
-                    <div class="tab">Birthday:
-                        <p><input placeholder="dd" oninput="this.className = ''" name="dd"></p>
-                        <p><input placeholder="mm" oninput="this.className = ''" name="nn"></p>
-                        <p><input placeholder="yyyy" oninput="this.className = ''" name="yyyy"></p>
-                    </div>
-                    <div class="tab">Login Info:
-                        <p><input placeholder="Username..." oninput="this.className = ''" name="uname"></p>
-                        <p><input placeholder="Password..." oninput="this.className = ''" name="pword" type="password"></p>
-                    </div>
-                    <div style="overflow:auto;">
-                        <div style="float:right;">
-                            <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                            <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                <form method="POST" action="">
+                    <div class="container">
+                        <div id="app">
+
+
+                            <div v-show="currentstep == 1">
+                                <h3>Step 1</h3>
+                                <div class="form-group">
+                                    <label for="email">Email address</label>
+                                    <input type="email" name="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" name="password" class="form-control" placeholder="Password">
+                                </div>
+                            </div>
+
+                            <div v-show="currentstep == 2">
+                                <h3>Step 2</h3>
+                                <div class="form-group">
+                                    <label for="select">Example select</label>
+                                    <select class="form-control" name="select">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div v-show="currentstep == 3">
+                                <h3>Step 3</h3>
+                                <div class="form-group">
+                                    <label for="textarea">Example textarea</label>
+                                    <textarea class="form-control" name="textarea" rows="4"></textarea>
+                                </div>
+
+                            </div>
+
+                            <step v-for="step in steps" :currentstep="currentstep" :key="step.id" :step="step" :stepcount="steps.length" @step-change="stepChanged">
+                            </step>
+
+                            <script type="x-template" id="step-navigation-template">
+                                <ol class="step-indicator">
+                                    <li v-for="step in steps" is="step-navigation-step" :key="step.id" :step="step" :currentstep="currentstep">
+                                    </li>
+                                </ol>
+                            </script>
+
+                            <script type="x-template" id="step-navigation-step-template">
+                                <li :class="indicatorclass">
+                                    <div class="step"><i :class="step.icon_class"></i></div>
+                                    <div class="caption hidden-xs hidden-sm">Step <span v-text="step.id"></span>: <span v-text="step.title"></span></div>
+                                </li>
+                            </script>
+
+                            <script type="x-template" id="step-template">
+                                <div class="step-wrapper" :class="stepWrapperClass">
+                                    <button type="button" class="btn btn-primary" @click="lastStep" :disabled="firststep">
+                                        Back
+                                    </button>
+                                    <button type="button" class="btn btn-primary" @click="nextStep" :disabled="laststep">
+                                        Next
+                                    </button>
+                                    <button type="submit" class="btn btn-primary" v-if="laststep">
+                                        Submit
+                                    </button>
+                                </div>
+                            </script>
                         </div>
                     </div>
-                    <!-- Circles which indicates the steps of the form: -->
-                    <div style="text-align:center;margin-top:40px;">
-                        <span class="step"></span>
-                        <span class="step"></span>
-                        <span class="step"></span>
-                        <span class="step"></span>
-                    </div>
                 </form>
+
 
             </div>
 
@@ -124,79 +119,101 @@
         </div>
 
 
+
+
         <script>
-            var currentTab = 0; // Current tab is set to be the first tab (0)
-            showTab(currentTab); // Display the crurrent tab
 
-            function showTab(n) {
-                // This function will display the specified tab of the form...
-                var x = document.getElementsByClassName("tab");
-                x[n].style.display = "block";
-                //... and fix the Previous/Next buttons:
-                if (n == 0) {
-                    document.getElementById("prevBtn").style.display = "none";
-                } else {
-                    document.getElementById("prevBtn").style.display = "inline";
-                }
-                if (n == (x.length - 1)) {
-                    document.getElementById("nextBtn").innerHTML = "Submit";
-                } else {
-                    document.getElementById("nextBtn").innerHTML = "Next";
-                }
-                //... and run a function that will display the correct step indicator:
-                fixStepIndicator(n)
-            }
+            Vue.component("step-navigation-step", {
+                template: "#step-navigation-step-template",
 
-            function nextPrev(n) {
-                // This function will figure out which tab to display
-                var x = document.getElementsByClassName("tab");
-                // Exit the function if any field in the current tab is invalid:
-                if (n == 1 && !validateForm()) return false;
-                // Hide the current tab:
-                x[currentTab].style.display = "none";
-                // Increase or decrease the current tab by 1:
-                currentTab = currentTab + n;
-                // if you have reached the end of the form...
-                if (currentTab >= x.length) {
-                    // ... the form gets submitted:
-                    document.getElementById("regForm").submit();
-                    return false;
-                }
-                // Otherwise, display the correct tab:
-                showTab(currentTab);
-            }
+                props: ["step", "currentstep"],
 
-            function validateForm() {
-                // This function deals with validation of the form fields
-                var x, y, i, valid = true;
-                x = document.getElementsByClassName("tab");
-                y = x[currentTab].getElementsByTagName("input");
-                // A loop that checks every input field in the current tab:
-                for (i = 0; i < y.length; i++) {
-                    // If a field is empty...
-                    if (y[i].value == "") {
-                        // add an "invalid" class to the field:
-                        y[i].className += " invalid";
-                        // and set the current valid status to false
-                        valid = false;
+                computed: {
+                    indicatorclass() {
+                        return {
+                            active: this.step.id == this.currentstep,
+                            complete: this.currentstep > this.step.id
+                        };
                     }
                 }
-                // If the valid status is true, mark the step as finished and valid:
-                if (valid) {
-                    document.getElementsByClassName("step")[currentTab].className += " finish";
-                }
-                return valid; // return the valid status
-            }
+            });
 
-            function fixStepIndicator(n) {
-                // This function removes the "active" class of all steps...
-                var i, x = document.getElementsByClassName("step");
-                for (i = 0; i < x.length; i++) {
-                    x[i].className = x[i].className.replace(" active", "");
+            Vue.component("step-navigation", {
+                template: "#step-navigation-template",
+
+                props: ["steps", "currentstep"]
+            });
+
+            Vue.component("step", {
+                template: "#step-template",
+
+                props: ["step", "stepcount", "currentstep"],
+
+                computed: {
+                    active() {
+                        return this.step.id == this.currentstep;
+                    },
+
+                    firststep() {
+                        return this.currentstep == 1;
+                    },
+
+                    laststep() {
+                        return this.currentstep == this.stepcount;
+                    },
+
+                    stepWrapperClass() {
+                        return {
+                            active: this.active
+                        };
+                    }
+                },
+
+                methods: {
+                    nextStep() {
+                        this.$emit("step-change", this.currentstep + 1);
+                    },
+
+                    lastStep() {
+                        this.$emit("step-change", this.currentstep - 1);
+                    }
                 }
-                //... and adds the "active" class on the current step:
-                x[n].className += " active";
-            }
+            });
+
+            new Vue({
+                el: "#app",
+
+                data: {
+                    currentstep: 1,
+
+                    steps: [
+                        {
+                            id: 1,
+                            title: "Personal",
+                            icon_class: "fa fa-user-circle-o"
+                        },
+                        {
+                            id: 2,
+                            title: "Details",
+                            icon_class: "fa fa-th-list"
+                        },
+                        {
+                            id: 3,
+                            title: "Send",
+                            icon_class: "fa fa-paper-plane"
+                        }
+                    ]
+                },
+
+                methods: {
+                    stepChanged(step) {
+                        this.currentstep = step;
+                    }
+                }
+            });
+
+
+
         </script>
 
     </body>
