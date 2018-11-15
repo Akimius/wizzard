@@ -37,42 +37,55 @@
 
             <div class="content">
 
-                <form method="POST" action="">
+                <form method="POST" action="{{ route('form.post') }}">
+                    @method('POST')
+                    {{csrf_field()}}
                     <div class="container">
                         <div id="app">
 
-
                             <div v-show="currentstep == 1">
-                                <h3>Step 1</h3>
+                                <h3>Шаг 1</h3>
                                 <div class="form-group">
-                                    <label for="email">Email address</label>
-                                    <input type="email" name="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
+                                    <label for="firstname"></label>
+                                    <input type="text" name="firstname" class="form-control" id="firstname" placeholder="Введите имя" required min="2">
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" name="password" class="form-control" placeholder="Password">
+                                    <label for="lastname"></label>
+                                    <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Введите фамилию" required min="2">
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="tel"></label>
+                                    <input type="tel" name="tel" class="form-control" id="tel" placeholder="Введите номер телефона" required>
+                                </div>
+
                             </div>
 
                             <div v-show="currentstep == 2">
-                                <h3>Step 2</h3>
+                                <h3>Шаг 2</h3>
                                 <div class="form-group">
-                                    <label for="select">Example select</label>
-                                    <select class="form-control" name="select">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                    </select>
+                                    <label for="street"></label>
+                                    <input type="text" name="street" class="form-control" id="street" placeholder="Улица" required min="2">
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="home"></label>
+                                    <input type="number" name="street" class="form-control" id="home" placeholder="Номер дома" required min="1">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="city"></label>
+                                    <input type="text" name="city" class="form-control" id="city" placeholder="Город" required min="2">
+                                </div>
+
                             </div>
 
                             <div v-show="currentstep == 3">
-                                <h3>Step 3</h3>
+                                <h3>Шаг 3</h3>
                                 <div class="form-group">
-                                    <label for="textarea">Example textarea</label>
-                                    <textarea class="form-control" name="textarea" rows="4"></textarea>
+                                    <label for="textarea">Комментарий</label>
+                                    <textarea class="form-control" name="textarea" id="comment" rows="4"></textarea>
                                 </div>
 
                             </div>
@@ -97,13 +110,13 @@
                             <script type="x-template" id="step-template">
                                 <div class="step-wrapper" :class="stepWrapperClass">
                                     <button type="button" class="btn btn-primary" @click="lastStep" :disabled="firststep">
-                                        Back
+                                        Назад
                                     </button>
                                     <button type="button" class="btn btn-primary" @click="nextStep" :disabled="laststep">
-                                        Next
+                                        Вперед
                                     </button>
                                     <button type="submit" class="btn btn-primary" v-if="laststep">
-                                        Submit
+                                        Отправить
                                     </button>
                                 </div>
                             </script>
@@ -111,14 +124,9 @@
                     </div>
                 </form>
 
-
             </div>
 
-
-
         </div>
-
-
 
 
         <script>
