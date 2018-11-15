@@ -35,9 +35,15 @@
                 </div>
             @endif--}}
 
-            <div class="content">
+            <div class="container">
 
-                <form method="POST" action="{{ route('form.post') }}">
+                <div class="container">
+                    <a class="navbar-brand" href="{{ url('/') }}">
+                        Домой
+                    </a>
+                </div>
+
+                <form method="POST" action="{{ route('contact.store') }}">
                     @method('POST')
                     {{csrf_field()}}
                     <div class="container">
@@ -47,17 +53,17 @@
                                 <h3>Шаг 1</h3>
                                 <div class="form-group">
                                     <label for="firstname"></label>
-                                    <input type="text" name="firstname" class="form-control" id="firstname" placeholder="Введите имя" required min="2">
+                                    <input type="text" name="firstname" class="form-control" id="firstname" placeholder="Введите имя">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="lastname"></label>
-                                    <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Введите фамилию" required min="2">
+                                    <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Введите фамилию">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="tel"></label>
-                                    <input type="tel" name="tel" class="form-control" id="tel" placeholder="Введите номер телефона" required>
+                                    <input type="tel" name="tel" class="form-control" id="tel" placeholder="Введите номер телефона">
                                 </div>
 
                             </div>
@@ -66,17 +72,17 @@
                                 <h3>Шаг 2</h3>
                                 <div class="form-group">
                                     <label for="street"></label>
-                                    <input type="text" name="street" class="form-control" id="street" placeholder="Улица" required min="2">
+                                    <input type="text" name="street" class="form-control" id="street" placeholder="Улица">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="home"></label>
-                                    <input type="number" name="street" class="form-control" id="home" placeholder="Номер дома" required min="1">
+                                    <input type="number" name="home" class="form-control" id="home" placeholder="Номер дома">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="city"></label>
-                                    <input type="text" name="city" class="form-control" id="city" placeholder="Город" required min="2">
+                                    <input type="text" name="city" class="form-control" id="city" placeholder="Город">
                                 </div>
 
                             </div>
@@ -84,8 +90,8 @@
                             <div v-show="currentstep == 3">
                                 <h3>Шаг 3</h3>
                                 <div class="form-group">
-                                    <label for="textarea">Комментарий</label>
-                                    <textarea class="form-control" name="textarea" id="comment" rows="4"></textarea>
+                                    <label for="comment">Комментарий</label>
+                                    <textarea class="form-control" name="comment" id="comment" rows="4"></textarea>
                                 </div>
 
                             </div>
@@ -93,19 +99,7 @@
                             <step v-for="step in steps" :currentstep="currentstep" :key="step.id" :step="step" :stepcount="steps.length" @step-change="stepChanged">
                             </step>
 
-                            <script type="x-template" id="step-navigation-template">
-                                <ol class="step-indicator">
-                                    <li v-for="step in steps" is="step-navigation-step" :key="step.id" :step="step" :currentstep="currentstep">
-                                    </li>
-                                </ol>
-                            </script>
 
-                            <script type="x-template" id="step-navigation-step-template">
-                                <li :class="indicatorclass">
-                                    <div class="step"><i :class="step.icon_class"></i></div>
-                                    <div class="caption hidden-xs hidden-sm">Step <span v-text="step.id"></span>: <span v-text="step.title"></span></div>
-                                </li>
-                            </script>
 
                             <script type="x-template" id="step-template">
                                 <div class="step-wrapper" :class="stepWrapperClass">
@@ -123,6 +117,16 @@
                         </div>
                     </div>
                 </form>
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
             </div>
 

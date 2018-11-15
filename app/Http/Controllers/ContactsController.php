@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Contact;
 use Illuminate\Http\Request;
 
-class ContactController extends Controller
+class ContactsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -30,12 +30,24 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @return void
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'firstname' => 'required|min:2',
+            'lastname' => 'required',
+            'tel' => 'required',
+            'street' => 'required',
+            'city' => 'required',
+            'comment' => 'required',
+        ]);
+
+        $contact = Contact::create($request->all());
+
+        return redirect()->route('result.show', $contact->id);
     }
 
     /**
@@ -46,7 +58,7 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        //
+        return view('result')->with('contact', $contact);
     }
 
     /**

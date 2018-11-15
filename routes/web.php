@@ -19,7 +19,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('contacts', 'ContactsController')
+Route::resource('/contact', 'ContactsController')
     ->names([
-    'create' => 'contact.create'
+    'store' => 'contact.store'
     ]);
+
+Route::get('contact/{id}', 'ContactsController@show')->name('result.show');
